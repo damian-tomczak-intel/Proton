@@ -1381,10 +1381,11 @@ $(eval $(call rules-meson,dxvk-nvapi-vkreflex-layer,x86_64,unix))
 $(eval $(call rules-meson,dxvk-nvapi-vkreflex-layer,aarch64,unix))
 
 $(OBJ)/.dxvk-nvapi-vkreflex-layer-post-source: patches-source
-	$(foreach p,$(shell find $(PATCHES_SRC)/dxvk-nvapi-vkreflex-layer/ -name "*.patch" | sort),patch -d $(DXVK_NVAPI_VKREFLEX_LAYER_SRC) -Np2 -i $(p) &&) true
+	$(foreach p,$(shell find $(PATCHES_SRC)/dxvk-nvapi-vkreflex-layer/ -name "*.patch" | sort),patch -d $(DXVK_NVAPI_VKREFLEX_LAYER_SRC) -Np2 -N -i $(p) &&) true
 	sed -re 's#@VCS_TAG@#$(shell git -C $(SRCDIR)/dxvk-nvapi describe --always --abbrev=15 --dirty=0)#' \
 	    $(SRCDIR)/dxvk-nvapi/version.h.in > $(DXVK_NVAPI_VKREFLEX_LAYER_SRC)/version.h.in
 	cp -a $(SRCDIR)/dxvk-nvapi/config.h.in $(DXVK_NVAPI_VKREFLEX_LAYER_SRC)/config.h.in
+	rm -rf $(DXVK_NVAPI_VKREFLEX_LAYER_SRC)/external/
 	mkdir -p $(DXVK_NVAPI_VKREFLEX_LAYER_SRC)/external/
 	cp -a $(SRCDIR)/dxvk-nvapi/external/Vulkan-Headers $(DXVK_NVAPI_VKREFLEX_LAYER_SRC)/external/Vulkan-Headers
 	cp -a $(SRCDIR)/dxvk-nvapi/external/vkroots $(DXVK_NVAPI_VKREFLEX_LAYER_SRC)/external/vkroots
